@@ -95,6 +95,10 @@ Records after duplicates removed: {num_withoutDuplicates}\n''')
 
     print(data)
 
+    keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers",}
+    keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
+    filterDB(data, keywordsTitles, keywordsAbstract)
+
     """ CONNECTION = sqlite3.connect(DB_name)
     CURSOR = CONNECTION.cursor()
 
