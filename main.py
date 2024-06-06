@@ -53,3 +53,27 @@ def readFile(fileName):
     data = data.drop(columns=[col for col in data_to_pop if col in data.columns])
 
     return data
+
+def setupDB(data):
+    CURSOR.execute('''
+        CREATE TABLE
+            articles(
+                type TEXT,
+                publication_year INTEGER,
+                authors TEXT NOT NULL,
+                title TEXT NOT NULL,
+                publication TEXT NOT NULL,
+                DOI TEXT,
+                URL TEXT,
+                abstract TEXT NOT NULL,
+                date_added TEXT,
+                pages TEXT,
+                issues TEXT,
+                volume TEXT,
+                short_title TEXT,
+                catologue TEXT,
+                links TEXT
+            )
+    ;''')
+    
+    CONNECTION.commit
