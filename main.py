@@ -54,6 +54,17 @@ def readFile(fileName):
 
     return data
 
+def containsKeywords(text, keywords):
+    return any(keyword.lower() in str(text).lower() for keyword in keywords)
+
+def filterDB(data, keywordsTitle, keywordsAbstract):
+    filteredTitles = data['Title'].apply(lambda x: containsKeywords(x, keywordsTitle))
+    filteredAbstracts = data['Abstract Note'].apply(lambda x: containsKeywords(x, keywordsAbstract))
+
+    filteredData = [filteredTitles & filteredAbstracts]
+
+    print(filteredData)
+
 def setupDB(data):
     CURSOR.execute('''
         CREATE TABLE
