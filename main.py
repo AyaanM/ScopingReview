@@ -44,3 +44,8 @@ def createDB():
             DB_exists = True # if db doesn't exit create it
 
     return DB_name
+
+def readFile(fileName):
+    data = pd.read_csv(fileName)
+
+    return data
