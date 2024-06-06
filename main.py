@@ -82,3 +82,10 @@ if __name__ == "__main__":
     fileName = checkFile()
     data = readFile(fileName)
     DB_name = createDB()
+
+    print(data)
+
+    CONNECTION = sqlite3.connect(DB_name)
+    CURSOR = CONNECTION.cursor()
+
+    setupDB(data)
