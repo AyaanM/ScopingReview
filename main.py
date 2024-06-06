@@ -18,6 +18,8 @@ def checkFile():
         my_file = Path(fileName)
         if my_file.is_file():
             fileExists = True
-        
+        else:
+            print("File doesn't exist, check the spelling\n")
+            fileName = input("File Name: ")
 
     return fileName
