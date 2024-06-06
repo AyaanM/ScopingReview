@@ -13,7 +13,6 @@ notes:
     This program discards all scoping, systematic, and literature reviews, as well as any meta-analyses and any theory studies
 '''
 
-import sqlite3
 from pathlib import Path
 import pandas as pd
 
@@ -32,20 +31,6 @@ def checkFile():
             fileName = input("File Name: ")
 
     return fileName
-
-def createDB():
-    # connect to the database
-    DB_name = input("What would you like to call your Database File? ")
-    DB_exists = False # assume db doesn't exist
-
-    while not DB_exists:
-        if (Path.cwd() / DB_name).exists() == True: #if db exists, can't use it
-            print("DB already exists, ether delete that or give another name\n")
-            DB_name = input("What would you like to call your Database File? ")
-        else:
-            DB_exists = True # if db doesn't exit create it
-
-    return DB_name
 
 def readFile(fileName):
     data = pd.read_csv(fileName)
@@ -71,36 +56,11 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
 
     return filteredData
 
-""" def setupDB(data):
-    CURSOR.execute('''
-        CREATE TABLE
-            articles(
-                type TEXT,
-                publication_year INTEGER,
-                authors TEXT NOT NULL,
-                title TEXT NOT NULL,
-                publication TEXT NOT NULL,
-                DOI TEXT,
-                URL TEXT,
-                abstract TEXT NOT NULL,
-                date_added TEXT,
-                pages TEXT,
-                issues TEXT,
-                volume TEXT,
-                short_title TEXT,
-                catologue TEXT,
-                links TEXT
-            )
-    ;''')
-    
-    CONNECTION.commit """
-
 if __name__ == "__main__":
     fileName = checkFile()
     data = readFile(fileName)
-    #DB_name = createDB()
-
-    nonDublicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
+    
+    nonDuplicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
 
     #filter dataset
     keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers",}
@@ -111,16 +71,11 @@ if __name__ == "__main__":
 
     #print numbers
     print(f'''Records from csv file: {len(data)}
-Duplicates present in dataset: {len(data) - len(nonDublicatedData)}
-Records after duplicates removed: {len(nonDublicatedData)}
+Duplicates present in dataset: {len(data) - len(nonDuplicatedData)}
+Records after duplicates removed: {len(nonDuplicatedData)}
 Records after filtering data: {len(filteredData)}\n''')
 
     save = input("Save Data to CSV (Y/N)? ")
     if save.lower() == "y" or save.lower == "yes":
         filteredData.to_csv(f"filteredStudies{fileName}", index=False)
         print(f"The filterd data has been saved to filteredStudies{fileName}.")
-
-    """CONNECTION = sqlite3.connect(DB_name)
-    CURSOR = CONNECTION.cursor()
-
-    setupDB(data)"""
