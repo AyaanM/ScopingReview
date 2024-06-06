@@ -77,3 +77,8 @@ def setupDB(data):
     ;''')
     
     CONNECTION.commit
+
+if __name__ == "__main__":
+    fileName = checkFile()
+    data = readFile(fileName)
+    DB_name = createDB()
