@@ -57,6 +57,7 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
     return filteredData
 
 if __name__ == "__main__":
+    # validate file get data
     fileName = checkFile()
     data = readFile(fileName)
     
@@ -67,15 +68,18 @@ if __name__ == "__main__":
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
     filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
 
-    print(filteredData)
+    print(f"{filteredData}\n")
 
     #print numbers
-    print(f'''Records from csv file: {len(data)}
+    print(f'''Records from CSV file: {len(data)}
 Duplicates present in dataset: {len(data) - len(nonDuplicatedData)}
-Records after duplicates removed: {len(nonDuplicatedData)}
-Records after filtering data: {len(filteredData)}\n''')
+Records after duplicates removed from dataset: {len(nonDuplicatedData)}
+Records after filtering dataset with given keywords: {len(filteredData)}\n''')
 
+    #save the csv file
     save = input("Save Data to CSV (Y/N)? ")
     if save.lower() == "y" or save.lower == "yes":
         filteredData.to_csv(f"filteredStudies{fileName}", index=False)
         print(f"The filterd data has been saved to filteredStudies{fileName}.")
+
+    
