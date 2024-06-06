@@ -9,6 +9,8 @@ notes:
 
     This program will remove unnessesary types and only store:
     [Item Type, Publication Year, Author(s), Title, Publication Title, DOI, URL, Abstract Note, Date Added, Pages, Issue, Volume, Short Title, Library Catologue, Link Attachments]
+
+    This program discards all scoping, systematic, and literature reviews, as well as any meta-analyses and any theory studies
 '''
 
 import sqlite3
@@ -54,14 +56,18 @@ def readFile(fileName):
 
     return data
 
-def containsKeywords(text, keywords):
-    return any(keyword.lower() in str(text).lower() for keyword in keywords)
+def containsKeywords(filterType, text, keywords):
+    if filterType == "title":
+        if "review" in str(text).lower() or "meta-analyses" in str(text).lower() or "theory" in str(text).lower():
+            return False
+        return any(keyword.lower() in str(text).lower() for keyword in keywords)
+    return any(keyword.lower() in str(text).lower() for keyword in keywords) #any keyword elem is in text for all kewords
 
 def filterDB(data, keywordsTitle, keywordsAbstract):
-    filteredTitles = data['Title'].apply(lambda x: containsKeywords(x, keywordsTitle))
-    filteredAbstracts = data['Abstract Note'].apply(lambda x: containsKeywords(x, keywordsAbstract))
+    filteredTitles = data['Title'].apply(lambda x: containsKeywords("title", x, keywordsTitle)) #each x elem in db has x keyword x from keywords
+    filteredAbstracts = data['Abstract Note'].apply(lambda x: containsKeywords("abstract", x, keywordsAbstract))
 
-    filteredData = [filteredTitles & filteredAbstracts]
+    filteredData = [filteredTitles & filteredAbstracts] #combine both
 
     print(filteredData)
 
