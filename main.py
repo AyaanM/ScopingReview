@@ -23,3 +23,17 @@ def checkFile():
             fileName = input("File Name: ")
 
     return fileName
+
+def createDB():
+    # connect to the database
+    DB_name = input("What would you like to call your Database File? ")
+    DB_exists = False # assume db doesn't exist
+
+    while not DB_exists:
+        if (Path.cwd() / DB_name).exists() == True: #if db exists, can't use it
+            print("DB already exists, ether delete that or give another name\n")
+            DB_name = input("What would you like to call your Database File? ")
+        else:
+            DB_exists = True # if db doesn't exit create it
+
+    return DB_name
