@@ -67,9 +67,9 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
     filteredTitles = data['Title'].apply(lambda x: containsKeywords("title", x, keywordsTitle)) #each x elem in db has x keyword x from keywords
     filteredAbstracts = data['Abstract Note'].apply(lambda x: containsKeywords("abstract", x, keywordsAbstract))
 
-    filteredData = [filteredTitles & filteredAbstracts] #combine both
+    filteredData = data[filteredTitles & filteredAbstracts] #combine both
 
-    print(filteredData)
+    return filteredData
 
 """ def setupDB(data):
     CURSOR.execute('''
@@ -100,23 +100,20 @@ if __name__ == "__main__":
     data = readFile(fileName)
     #DB_name = createDB()
 
-    # remove duplicates get numbers
-    num_total = len(data) # articles before duplicates were removed
-    data = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
-    num_withoutDuplicates = len(data) # articles after duplicates removed
-    duplicates = num_total - num_withoutDuplicates
+    nonDublicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
 
-    print(f'''Records from internet screening: {num_total}
-Duplicates present in dataset: {duplicates}
-Records after duplicates removed: {num_withoutDuplicates}\n''')
-
-    print(data)
-
+    #filter dataset
     keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers",}
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
-    filterDB(data, keywordsTitles, keywordsAbstract)
+    filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
 
-    """ CONNECTION = sqlite3.connect(DB_name)
+    #print numbers
+    print(f'''Records from csv file: {len(data)}
+Duplicates present in dataset: {len(data) - len(nonDublicatedData)}
+Records after duplicates removed: {len(nonDublicatedData)}
+Records after filtering data: {len(filteredData)}\n''')
+
+    """CONNECTION = sqlite3.connect(DB_name)
     CURSOR = CONNECTION.cursor()
 
-    setupDB(data) """
+    setupDB(data)"""
