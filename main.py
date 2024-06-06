@@ -65,7 +65,7 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
 
     print(filteredData)
 
-def setupDB(data):
+""" def setupDB(data):
     CURSOR.execute('''
         CREATE TABLE
             articles(
@@ -87,12 +87,12 @@ def setupDB(data):
             )
     ;''')
     
-    CONNECTION.commit
+    CONNECTION.commit """
 
 if __name__ == "__main__":
     fileName = checkFile()
     data = readFile(fileName)
-    DB_name = createDB()
+    #DB_name = createDB()
 
     # remove duplicates get numbers
     num_total = len(data) # articles before duplicates were removed
