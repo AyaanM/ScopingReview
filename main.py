@@ -83,9 +83,19 @@ if __name__ == "__main__":
     data = readFile(fileName)
     DB_name = createDB()
 
+    # remove duplicates get numbers
+    num_total = len(data) # articles before duplicates were removed
+    data = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
+    num_withoutDuplicates = len(data) # articles after duplicates removed
+    duplicates = num_total - num_withoutDuplicates
+
+    print(f'''Records from internet screening: {num_total}
+Duplicates present in dataset: {duplicates}
+Records after duplicates removed: {num_withoutDuplicates}\n''')
+
     print(data)
 
-    CONNECTION = sqlite3.connect(DB_name)
+    """ CONNECTION = sqlite3.connect(DB_name)
     CURSOR = CONNECTION.cursor()
 
-    setupDB(data)
+    setupDB(data) """
