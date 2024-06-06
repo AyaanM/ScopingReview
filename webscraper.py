@@ -21,3 +21,17 @@ page_number = 1
 while True:
     # Find all divs with the class 'result-list'
     result_list_divs = soup.find_all('div', class_='result-list-record')
+
+    # Extract and print article names
+    for div in result_list_divs:
+        # Assuming article names are within <h3> tags inside these divs
+        articles = div.find_all('h3')
+        for name in articles:
+            print(name.get_text())
+
+    next_page = soup.find('title="Skip to page 2"')
+    if not next_page:
+        break  # No more pages, exit the loop
+
+    # Move to the next page
+    page_number += 1
