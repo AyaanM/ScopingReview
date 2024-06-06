@@ -107,11 +107,18 @@ if __name__ == "__main__":
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
     filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
 
+    print(filteredData)
+
     #print numbers
     print(f'''Records from csv file: {len(data)}
 Duplicates present in dataset: {len(data) - len(nonDublicatedData)}
 Records after duplicates removed: {len(nonDublicatedData)}
 Records after filtering data: {len(filteredData)}\n''')
+
+    save = input("Save Data to CSV (Y/N)? ")
+    if save.lower() == "y" or save.lower == "yes":
+        filteredData.to_csv(f"filteredStudies{fileName}", index=False)
+        print(f"The filterd data has been saved to filteredStudies{fileName}.")
 
     """CONNECTION = sqlite3.connect(DB_name)
     CURSOR = CONNECTION.cursor()
