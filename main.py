@@ -10,6 +10,8 @@ notes:
     This program will remove unnessesary types and only store:
     [Item Type, Publication Year, Author(s), Title, Publication Title, DOI, URL, Abstract Note, Date Added, Pages, Issue, Volume, Short Title, Library Catologue, Link Attachments]
 
+    Clicking on the DOI in the CSV will take you to the article
+
     This program discards all scoping, systematic, and literature reviews, as well as any meta-analyses and any theory studies
 '''
 
@@ -55,6 +57,10 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
     filteredData = data[filteredTitles & filteredAbstracts] #combine both
 
     return filteredData
+
+def enableDOIClicks(data):
+    None
+    #add https:// before every DOI
 
 if __name__ == "__main__":
     # validate file get data
