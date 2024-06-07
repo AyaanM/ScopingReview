@@ -10,7 +10,7 @@ notes:
     This program will remove unnessesary types and only store:
     [Item Type, Publication Year, Author(s), Title, Publication Title, DOI, URL, Abstract Note, Date Added, Pages, Issue, Volume, Short Title, Library Catologue, Link Attachments]
 
-    Clicking on the DOI in the CSV will take you to the article
+    Clicking on the DOI in the CSV will take you to the article, and provides you with numbers of articles from each catologue
 
     This program discards all scoping, systematic, and literature reviews, as well as any meta-analyses and any theory studies
 '''
@@ -67,6 +67,19 @@ if __name__ == "__main__":
     # validate file get data
     fileName = checkFile()
     data = readFile(fileName)
+
+    # calculate database numbers used
+    esbcoDB = 0
+    pubmedDB = 0
+    scienceDB = 0
+    jstorDB = 0
+    googleDB = 0
+    for index, row in data.iterrows():
+        if row["Library Catalog"] == "EBSCOhost": esbcoDB += 1
+        elif row["Library Catalog"] == "PubMed": pubmedDB += 1
+        elif row["Library Catalog"] == "ScienceDirect": scienceDB += 1
+        elif row["Library Catalog"] == "JSTOR": jstorDB += 1
+        else: googleDB += 1
     
     nonDuplicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
 
@@ -81,9 +94,16 @@ if __name__ == "__main__":
 
     #print numbers
     print(f'''Records from CSV file: {len(data)}
+
+ESBCO (AKU Discovery): {esbcoDB}
+PubMed: {pubmedDB}
+ScienceDirect: {scienceDB}
+JSTOR: {jstorDB}
+Google Scholar: {googleDB}
+
 Duplicates present in dataset: {len(data) - len(nonDuplicatedData)}
-Records after duplicates removed from dataset: {len(nonDuplicatedData)}
-Records after filtering dataset with given keywords: {len(filteredData)}\n''')
+Records present after removing duplicates: {len(nonDuplicatedData)}
+Records present after filtering (to be screened): {len(filteredData)}\n''')
 
     #save the csv file
     save = input("Save Data to CSV (Y/N)? ")
