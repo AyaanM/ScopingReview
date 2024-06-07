@@ -58,9 +58,10 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
 
     return filteredData
 
-def enableDOIClicks(data):
-    None
-    #add https:// before every DOI
+def enableDOI(data):
+    data['DOI'] = data['DOI'].apply(lambda x: "https://doi.org/" + x) # every x entity in dataset
+    
+    return data
 
 if __name__ == "__main__":
     # validate file get data
@@ -74,7 +75,9 @@ if __name__ == "__main__":
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
     filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
 
-    print(f"{filteredData}\n")
+    completeData = enableDOI(filteredData) #make doi a clickable link
+
+    print(f"{completeData}\n")
 
     #print numbers
     print(f'''Records from CSV file: {len(data)}
@@ -85,7 +88,7 @@ Records after filtering dataset with given keywords: {len(filteredData)}\n''')
     #save the csv file
     save = input("Save Data to CSV (Y/N)? ")
     if save.lower() == "y" or save.lower == "yes":
-        filteredData.to_csv(f"filteredStudies{fileName}", index=False)
+        completeData.to_csv(f"filteredStudies{fileName}", index=False)
         print(f"The filterd data has been saved to filteredStudies{fileName}.")
 
     
