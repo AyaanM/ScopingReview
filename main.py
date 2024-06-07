@@ -18,6 +18,14 @@ notes:
 from pathlib import Path
 import pandas as pd
 
+# --- DEFINE VARIABALES --- #
+esbcoDB = 0
+pubmedDB = 0
+scienceDB = 0
+jstorDB = 0
+googleDB = 0
+reviewsPresent = 0
+
 def checkFile():
     # Take file name input check if exists
     fileName = input("File Name: ")
@@ -44,8 +52,10 @@ def readFile(fileName):
     return data
 
 def containsKeywords(filterType, text, keywords):
+    global reviewsPresent
     if filterType == "title":
         if "review" in str(text).lower() or "meta-analyses" in str(text).lower() or "theory" in str(text).lower():
+            reviewsPresent += 1
             return False
         return any(keyword.lower() in str(text).lower() for keyword in keywords)
     return any(keyword.lower() in str(text).lower() for keyword in keywords) #any keyword elem is in text for all kewords
@@ -63,27 +73,25 @@ def enableDOI(data):
     
     return data
 
-if __name__ == "__main__":
-    # validate file get data
-    fileName = checkFile()
-    data = readFile(fileName)
-
-    # calculate database numbers used
-    esbcoDB = 0
-    pubmedDB = 0
-    scienceDB = 0
-    jstorDB = 0
-    googleDB = 0
+def calcDBNums(data):
+    global esbcoDB, pubmedDB, scienceDB, jstorDB, googleDB
     for index, row in data.iterrows():
         if row["Library Catalog"] == "EBSCOhost": esbcoDB += 1
         elif row["Library Catalog"] == "PubMed": pubmedDB += 1
         elif row["Library Catalog"] == "ScienceDirect": scienceDB += 1
         elif row["Library Catalog"] == "JSTOR": jstorDB += 1
         else: googleDB += 1
+
+if __name__ == "__main__":
+    # validate file get data
+    fileName = checkFile()
+    data = readFile(fileName)
+
+    calcDBNums(data) # calculate database numbers used
     
     nonDuplicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
 
-    #filter dataset
+    #filter dataset based on keywords
     keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers",}
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
     filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
@@ -94,16 +102,21 @@ if __name__ == "__main__":
 
     #print numbers
     print(f'''Records from CSV file: {len(data)}
-
-ESBCO (AKU Discovery): {esbcoDB}
-PubMed: {pubmedDB}
-ScienceDirect: {scienceDB}
-JSTOR: {jstorDB}
-Google Scholar: {googleDB}
+    ESBCO (AKU Discovery): {esbcoDB}
+    PubMed: {pubmedDB}
+    ScienceDirect: {scienceDB}
+    JSTOR: {jstorDB}
+    Google Scholar: {googleDB}
 
 Duplicates present in dataset: {len(data) - len(nonDuplicatedData)}
+
 Records present after removing duplicates: {len(nonDuplicatedData)}
-Records present after filtering (to be screened): {len(filteredData)}\n''')
+
+Records present after filtering (to be screened): {len(filteredData)}
+
+Records Excluded after fltering: {len(nonDuplicatedData) - len(filteredData)}
+    Reviews & Meta Analyses & Theories: {reviewsPresent} 
+    Unrelated Studies: {len(nonDuplicatedData) - len(filteredData) - reviewsPresent}\n''')
 
     #save the csv file
     save = input("Save Data to CSV (Y/N)? ")
