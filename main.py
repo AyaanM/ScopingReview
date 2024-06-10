@@ -54,8 +54,11 @@ def readFile(fileName):
 def containsKeywords(filterType, text, keywords):
     global reviewsPresent
     if filterType == "title":
-        if "review" in str(text).lower() or "meta-analyses" in str(text).lower() or "theory" in str(text).lower():
+        if "review" in str(text).lower() or "meta-analyses" in str(text).lower() or "theory" in str(text).lower() or "theories" in str(text).lower():
             reviewsPresent += 1
+            return False
+        elif any(keyword.lower() not in str(text).lower() for keyword in keywords):
+            nonRelated += 1
             return False
         return any(keyword.lower() in str(text).lower() for keyword in keywords)
     return any(keyword.lower() in str(text).lower() for keyword in keywords) #any keyword elem is in text for all kewords
@@ -92,8 +95,8 @@ if __name__ == "__main__":
     nonDuplicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
 
     #filter dataset based on keywords
-    keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers",}
-    keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy", }
+    keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers", "young children", "youth", "K-12"}
+    keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy"}
     filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
 
     completeData = enableDOI(filteredData) #make doi a clickable link
