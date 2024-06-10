@@ -122,6 +122,6 @@ Records Excluded after fltering: {len(nonDuplicatedData) - len(filteredData)}
     save = input("Save Data to CSV (Y/N)? ")
     if save.lower() == "y" or save.lower == "yes":
         completeData.to_csv(f"Filtered{fileName}", index=False)
-        print(f"The filterd data has been saved to Filered{fileName}.")
+        print(f"The new filterd data has been saved to Filered{fileName}.")
 
     
