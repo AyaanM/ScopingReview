@@ -69,8 +69,7 @@ def filterDB(data, keywordsTitle, keywordsAbstract):
     return filteredData
 
 def enableDOI(data):
-    if data['DOI'] is str:
-        data['DOI'] = data['DOI'].apply(lambda x: "https://doi.org/" + x) # every x entity in dataset
+    data['DOI'] = data['DOI'].apply(lambda x: "https://doi.org/" + str(x)) # Convert x to string # every x entity in dataset
     return data
 
 def calcDBNums(data):
