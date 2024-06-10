@@ -88,12 +88,12 @@ if __name__ == "__main__":
 
     calcDBNums(data) # calculate database numbers used
     
-    nonDuplicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
+    nonDuplicatedData = data.drop_duplicates(subset=["Title"]) # remove all duplicates from dataset
 
     #filter dataset based on keywords
     keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers", "young children", "youth", "K-12", "alpha generation"}
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy"}
-    filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
+    filteredData = filterDB(nonDuplicatedData, keywordsTitles, keywordsAbstract)
 
     completeData = enableDOI(filteredData) #make doi a clickable link
 
