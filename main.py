@@ -57,9 +57,6 @@ def containsKeywords(filterType, text, keywords):
         if "review" in str(text).lower() or "meta-analyses" in str(text).lower() or "theory" in str(text).lower() or "theories" in str(text).lower():
             reviewsPresent += 1
             return False
-        elif any(keyword.lower() not in str(text).lower() for keyword in keywords):
-            nonRelated += 1
-            return False
         return any(keyword.lower() in str(text).lower() for keyword in keywords)
     return any(keyword.lower() in str(text).lower() for keyword in keywords) #any keyword elem is in text for all kewords
 
@@ -95,7 +92,7 @@ if __name__ == "__main__":
     nonDuplicatedData = data.drop_duplicates(subset=['Title', 'Author']) # remove all duplicates from dataset
 
     #filter dataset based on keywords
-    keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers", "young children", "youth", "K-12"}
+    keywordsTitles = {"early childhood education", "children", "kindergarden", "preschool", "toddlers", "young children", "youth", "K-12", "alpha generation"}
     keywordsAbstract = {"ai literacy", "artificial intellegence", "robotics", "machine learning", "augmented reality", "emergent technology", "robots", "computers", "computer science", "AI Literacy"}
     filteredData = filterDB(data, keywordsTitles, keywordsAbstract)
 
@@ -124,7 +121,7 @@ Records Excluded after fltering: {len(nonDuplicatedData) - len(filteredData)}
     #save the csv file
     save = input("Save Data to CSV (Y/N)? ")
     if save.lower() == "y" or save.lower == "yes":
-        completeData.to_csv(f"filteredStudies{fileName}", index=False)
-        print(f"The filterd data has been saved to filteredStudies{fileName}.")
+        completeData.to_csv(f"{fileName}Filtered", index=False)
+        print(f"The filterd data has been saved to {fileName}Filtered.")
 
     
